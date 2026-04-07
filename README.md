@@ -45,7 +45,7 @@ sudo docker build -t nordvpn-docker .
 
 ### 3. Deploy the NordVPN Gateway Container
 Run the container with the necessary networking permissions.
-(**Note:** For audiobookshelf we map port `13378` on the host to port `80` in the container. Because our app will share this network, it will be accessible via port 80.):
+(**Note:** For audiobookshelf we map port `13378` on the host to port `80` in the container. Because our app will share this network, it will be accessible via port 80, *or specify your preferred port*.):
 ```
 sudo docker run -d \
    --name nordvpn-meshnet \
@@ -86,7 +86,7 @@ services:
 ```
 Change the volume directories specified in the `docker-compose.yml` above to fit your setup.
 *Make sure all host volume paths exist before creating the audiobookshelf container in the next step.*
-This `docker-compose.yml` is a slightly modified version of the one we are instructed to create when following [the official audiobookshelf guide for Docker Compose](https://www.audiobookshelf.org/docs/#docker-compose-install); instead of specifying the ports, we've bound the application's network identity to the NordVPN container, and in step 3 we mapped port `13378` to port `80` in the NordVPN Container already. Your port mappings will be different depending on the application you are working with.
+This `docker-compose.yml` is a slightly modified version of the one we are instructed to create when following [the official audiobookshelf guide for Docker Compose](https://www.audiobookshelf.org/docs/#docker-compose-install); instead of specifying the ports here, we've bound the application's network identity to the NordVPN container, and in step 3 we mapped port `13378` to port `80` *(or the one you specified)* in the NordVPN Container already. Your port mappings may be different depending on the application you are working with; *see your application's documentation for more information.*
 
 ### 5. Deploy the Application Container
 Run the container: `sudo docker-compose up -d`
