@@ -3,7 +3,7 @@
 
 ## Why this guide?
  - **Most online tutorials rely on third-party images (Gluetun, Bubuntux, etc.). This guide uses the official NordVPN Linux client built into a custom image.** *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
- - **Since installing NordVPN on a Linux machine currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers, this is a solution that works around that so that you don't have to expose your entire machine to your Meshnet peers or mess with firewall stuff to solve that issue.**
+ - **Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet) containers, this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.**
 
 ## Instructions
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker container for NordVPN. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
