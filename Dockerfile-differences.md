@@ -10,7 +10,7 @@ Here are the specific differences between the two `Dockerfile`s broken down by c
 ### 2. File System Preparation
 A major point of failure for VPNs in Docker is a "stale" PID or socket file from a previous run.
  - **Our Custom Dockerfile's Addition:** `rm -rf /run/nordvpn && mkdir -p /run/nordvpn`
-This ensures that any old lock files are cleared and the necessary directory exists before the service attempts to start. The first Dockerfile lacks this, which can lead to the service failing to start if the container is restarted.
+This ensures that any old lock files are cleared and the necessary directory exists before the service attempts to start. The OFFICIAL NordVPN Dockerfile lacks this, which can lead to the service failing to start if the container is restarted.
 
 ### 3. Entrypoint Execution (Shell vs. Exec)
 How the container starts is the most critical technical difference here.
