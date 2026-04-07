@@ -6,7 +6,7 @@
  - **Since installing NordVPN on a Linux machine currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers, this is a solution that works around that so that you don't have to expose your entire machine to your Meshnet peers or mess with firewall stuff to solve that issue.**
 
 ## Instructions
-This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a docker container through a NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
+This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker container for NordVPN. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
 ### 1. Create the Dockerfile for the NordVPN Container
 Create a directory (e.g. `sudo mkdir ~/nordvpn-meshnet/`), open it (e.g. `cd ~/nordvpn-meshnet/`) and save the following as `Dockerfile` inside it (e.g. `sudo nano Dockerfile`, keyboard shortcut `Shift+Insert` to paste with formatting, then `Ctrl+X` to save, followed by `y` to confirm saving, then `Enter` to confirm filename):
