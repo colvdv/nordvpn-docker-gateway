@@ -63,7 +63,7 @@ sudo docker run -d \
 **Pro Tip:** After starting the NordVPN Docker Container, interact with NordVPN using the following command format `docker exec -it nordvpn-meshnet nordvpn <COMMAND>` (e.g. `docker exec -it nordvpn-meshnet nordvpn login --token <YOUR_TOKEN>` to [login to your NordVPN account using a token](https://support.nordvpn.com/hc/en-us/articles/20286980309265-How-to-use-a-token-with-NordVPN-on-Linux)).
 
 ### 🔗 4. Link your Application Container (audiobookshelf Example)
-In your application’s (audiobookshelf) `docker-compose.yml`, the "magic" happens with `network_mode`.
+In your application’s (audiobookshelf) `docker-compose.yml` (e.g., `~/audiobookshelf/docker-compose.yml`), the "magic" happens with `network_mode`.
 ```
 services:
   audiobookshelf:
