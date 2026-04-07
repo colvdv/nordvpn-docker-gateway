@@ -2,7 +2,7 @@
 Here are the specific differences between the two `Dockerfile`s broken down by category:
 
 ### 1. Package Management & Efficiency
-[NordVPN's OFFICIAL Dockerfile](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image) contains redundancies that increase build time and potential for errors, while [Our Custom Dockerfile]() optimizes the environment for networking.
+[NordVPN's OFFICIAL Dockerfile](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image) contains redundancies that increase build time and potential for errors, while [Our Custom Dockerfile](https://github.com/colvdv/official-nordvpn-docker-gateway/blob/main/Dockerfile) optimizes the environment for networking.
  - **Redundancy:** The OFFICIAL script calls `apt-get install` for the same dependencies twice in a row. The second script consolidates these into a single, clean list.
  - **Essential Networking Tools:** Our Custom Dockerfile adds `iproute2` and `iptables`. Since NordVPN functions by manipulating network routing and firewall rules, these packages are often required for the VPN client to actually establish a secure tunnel.
  - **Readability:** Our version uses backslashes and indentation to make the dependency list legible, aligning with the excellence of clean code standards.
