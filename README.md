@@ -98,6 +98,6 @@ The NordVPN Container (`nordvpn-meshnet`) should now access the `audiobookshelf`
  - 🌐 To access audiobookshelf over Meshnet, open the Meshnet device IP (http://x.x.x.x/) or Meshnet device name in your browser from a linked Meshnet device (http://device-name.nord/ or http://device-nickname/), no port specification needed since the Meshnet container is pointing to port 80 now *(unless you specified a different port earlier in step 3)*.
  - 🏠 To access audiobookshelf from the local machine it is still http://localhost:13378/.
 
-### If you have any questions, open an [issue](https://github.com/colvdv/official-nordvpn-docker-gateway/issues) and I'll give it a look. Otherwise, happy networking!
+### Feedback is appreciated! If you have any questions or issues, open an [issue](https://github.com/colvdv/official-nordvpn-docker-gateway/issues) and I'll give it a look. Otherwise, happy networking!
 
 <h2 align="center">⭐ <ins>Star this repository!</ins> ⭐</h2>
