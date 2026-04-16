@@ -1,4 +1,4 @@
-# COLVDV/nordvpn-docker-gateway
+# NordVPN Docker Gateway
 ### **[GUIDE] Route any Docker Container through the OFFICIAL NordVPN Linux Client in a Custom Docker Image (with Meshnet access) without 3rd-Party Tools or Exposing LAN**
 
 > [!NOTE]
