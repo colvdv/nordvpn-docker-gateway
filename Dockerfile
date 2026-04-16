@@ -1,8 +1,12 @@
 FROM ubuntu:24.04@sha256:3a4c9877b483ab46d7c3fbe165a0db275e1ae3cfe56a5657e5a47c2f99a99d1e
 
-LABEL maintainer="COLVDV" \
-      version="1.1.0" \
-      description="NordVPN Docker Gateway with Meshnet"
+LABEL org.opencontainers.image.authors="COLVDV" \
+      org.opencontainers.image.title="NordVPN Docker Gateway" \
+      org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
+      org.opencontainers.image.version="1.1.0" \
+      org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
+      org.opencontainers.image.licenses="MIT" \
+      capabilities.net_admin="required"
 
 # Install dependencies and NordVPN in a single clean layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
