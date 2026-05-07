@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # The Anchor: Starts the service, waits for initialization, then stays alive
 ENTRYPOINT ["/bin/bash", "-c", "\
+    # Remove stale PID/socket files from previous runs to prevent daemon start failures
     rm -rf /run/nordvpn && mkdir -p /run/nordvpn && \
     /etc/init.d/nordvpn start && \
     timeout 30 bash -c 'until nordvpn status &>/dev/null; do sleep 1; done' && \
