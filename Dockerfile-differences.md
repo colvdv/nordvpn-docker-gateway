@@ -1,29 +1,25 @@
 ## The OFFICIAL NordVPN Dockerfile vs. Our Custom Dockerfile
 Here are the specific differences between the two `Dockerfile`s broken down by category:
 
-### 1. Package Management & Efficiency
-[NordVPN's OFFICIAL Dockerfile](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image) contains redundancies that increase build time and potential for errors, while [Our Custom Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) optimizes the environment for networking.
- - **Redundancy:** The OFFICIAL script calls `apt-get install` for the same dependencies twice in a row. Our script consolidates these into a single, clean layer.
- - **Essential Networking Tools:** Our Custom Dockerfile adds `iproute2` and `iptables`. Since NordVPN functions by manipulating network routing and firewall rules, these packages are often required for the VPN client to actually establish a secure tunnel.
- - **Readability:** Our version uses backslashes and indentation to make the dependency list legible, aligning with the excellence of clean code standards.
+### 1. Security & Image Integrity
+[Our Custom Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) implements enterprise-grade security measures that [NordVPN's OFFICIAL Dockerfile](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image) overlooks.
+ - **Immutable Base Image:** We use a specific digest (`ubuntu:24.04@sha256:...`) rather than a generic tag. This ensures that every build is identical and protected against "poisoned" base image updates.
+ - **GPG Fingerprint Verification:** Before installing the NordVPN package, our script performs a dry-run GPG import to verify the public key fingerprint. This prevents Man-in-the-Middle (MITM) attacks during the build process.
+ - **Modern Keyring Management:** We follow the latest Debian/Ubuntu security standards by using `/usr/share/keyrings/` and the `signed-by` flag, rather than the deprecated `apt-key` or `trusted.gpg.d` methods used in the OFFICIAL script.
  
-### 2. File System Preparation
-A major point of failure for VPNs in Docker is a "stale" PID or socket file from a previous run.
- - **Our Custom Dockerfile's Addition:** `rm -rf /run/nordvpn && mkdir -p /run/nordvpn`
-This ensures that any old lock files are cleared and the necessary directory exists before the service attempts to start. The OFFICIAL NordVPN Dockerfile lacks this, which can lead to the service failing to start if the container is restarted.
+### 2. Package Management & Reproducibility
+While the OFFICIAL Dockerfile contains redundancies, our Custom Dockerfile focuses on optimization and predictable deployments.
+ - **Version Pinning:** Our script pins the client to a specific version (`nordvpn=4.6.0`). This prevents "broken builds" caused by unexpected upstream updates, ensuring consistent behavior across all deployments.
+ - **Optimized Build Layer:** We consolidated dependencies into a single layer and removed the redundant apt-get install calls found in the OFFICIAL version.
+ - **Networking Toolset:** We include `iproute2` and `iptables`. These are essential for the VPN client to manipulate routing tables and firewall rules, which are necessary to establish a functional tunnel.
 
-### 3. Entrypoint Execution (Shell vs. Exec)
-How the container starts is the most critical technical difference here.
- - **OFFICIAL Dockerfile (Shell Form):** `ENTRYPOINT /etc/init.d/nordvpn start ...`
-This uses "shell form", meaning the command runs as a child of `/bin/sh -c`. This often prevents the container from receiving OS signals (like SIGTERM), making it harder to shut down gracefully.
- - **Our Custom Dockerfile (Exec Form):** `ENTRYPOINT ["/bin/bash", "-c", ...]`
-This uses "JSON array format" (Exec form). It is the preferred method for ensuring signals are handled correctly and provides more explicit control over the environment.
+### 3. Service Reliability & Health Monitoring
+A container that "starts" isn't always "working." Our Custom Dockerfile adds intelligence to the container lifecycle.
+ - **Automated Healthcheck:** We include a `HEALTHCHECK` instruction that polls the NordVPN daemon every 30 seconds. If the daemon crashes or becomes unresponsive, Docker can automatically restart the container or alert the maintainer.
+ - **Daemon Readiness Polling:** The OFFICIAL script uses a blunt `sleep 5` to wait for the service. Our Custom script uses a smart `until` loop that polls the daemon’s status, proceeding only when the service is actually ready.
+ - **Stale File Cleanup:** We explicitly run `rm -rf /run/nordvpn` at startup. This prevents the "stale socket" error that often causes the OFFICIAL container to fail if it wasn't shut down gracefully previously.
 
-### 4. Container Persistence (Keep-Alive)
-This is the functional difference in how the container behaves after starting.
- - **OFFICIAL NordVPN Dockerfile:** `/bin/bash -c "$@"`
- **Behavior:** Expects a command to be passed or falls back to an interactive bash shell.
- **Use Case:** Designed for interactive use where you want to type commands.
- - **Our Custom Dockerfile:** `while true; do sleep 10 & wait $!; done`
- **Behavior:** Stays alive indefinitely by running a non-blocking wait loop.
- **Use Case:** Designed specifically for a "Service" or "Sidecar" container that provides a persistent network for other containers to route through.
+### 4. Signal Handling & Persistence
+The method of execution determines how the container responds to the environment.
+ - **Graceful Shutdown:** Our Custom Dockerfile uses the Exec form (`ENTRYPOINT ["/bin/bash", "-c", ...]`) combined with a trap for `SIGTERM` and `SIGINT`. This allows the NordVPN service to shut down cleanly and disconnect when the container is stopped.
+ - **Service-Oriented Loop:** Instead of dropping into a bash shell, our version uses a non-blocking `while` loop (`wait $!`). This keeps the container alive indefinitely as a stable network gateway for other services to route through, a persistent, "always-on" architecture.
