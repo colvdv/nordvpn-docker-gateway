@@ -15,35 +15,46 @@ This guide will walk you through the creation of all of the files, their content
 Create a directory (e.g. `sudo mkdir ~/nordvpn-meshnet/`), open it (e.g. `cd ~/nordvpn-meshnet/`) and save the following as `Dockerfile` inside it (e.g. `sudo nano Dockerfile`, keyboard shortcut `Shift+Insert` to paste with formatting, then `Ctrl+X` to save, followed by `y` to confirm saving, then `Enter` to confirm filename):
 
 ```
-FROM ubuntu:24.04@sha256:3a4c9877b483ab46d7c3fbe165a0db275e1ae3cfe56a5657e5a47c2f99a99d1e
+FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b
 
 LABEL org.opencontainers.image.authors="COLVDV" \
       org.opencontainers.image.title="NordVPN Docker Gateway" \
       org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
-      org.opencontainers.image.version="1.1.0" \
+      org.opencontainers.image.version="1.2.0" \
       org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
       org.opencontainers.image.licenses="MIT" \
-      capabilities.net_admin="required"
+      capabilities.net_admin="required" \
+      capabilities.net_raw="required"
 
-# Install dependencies and NordVPN in a single clean layer
+# Optimized build layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget \
-    apt-transport-https \
-    ca-certificates \
-    iproute2 \
-    iptables \
-    && wget -qO /etc/apt/trusted.gpg.d/nordvpn_public.asc https://repo.nordvpn.com/gpg/nordvpn_public.asc \
-    && echo "deb https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
-    && apt-get update \
-    # Specify desired NordVPN version here; 4.5.0 is the latest as of this writing and is stable.
-    && apt-get install -y --no-install-recommends nordvpn=4.5.0 \ 
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    wget \
+    gnupg \
+    ca-certificates \
+    iproute2 \
+    iptables \
+    && mkdir -p -m 0700 /root/.gnupg \
+    && wget -qO /tmp/nordvpn.asc https://repo.nordvpn.com/gpg/nordvpn_public.asc \
+    # Verify fingerprint to prevent MITM attacks
+    && gpg --dry-run --quiet --import --import-options show-only /tmp/nordvpn.asc | grep -q "BC5480EFEC5C081CE5BCFBE26B219E535C964CA1" \
+    && cat /tmp/nordvpn.asc | gpg --dearmor > /usr/share/keyrings/nordvpn-keyring.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
+    && apt-get update \
+    # Pinned to specific NordVPN version (4.6.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
+    && apt-get install -y --no-install-recommends nordvpn=4.6.0 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/nordvpn.asc /root/.gnupg
 
-# The Anchor: Starts the service, waits for initialization, then stays alive
-ENTRYPOINT ["/bin/bash", "-c", "\
-    # Remove stale PID/socket files from previous runs to prevent daemon start failures
-    rm -rf /run/nordvpn && mkdir -p /run/nordvpn && \
+# HEALTHCHECK: Ensures the daemon is responsive and NordVPN is in a valid state
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD nordvpn status | grep -qE "Status: Disconnected|Status: Connected" || exit 1
+
+# Entrypoint Logic
+# Clears stale PID/socket files to prevent startup failure after unclean shutdowns
+# Polls for daemon readiness before proceeding
+# Graceful shutdown handler
+ENTRYPOINT ["/bin/bash", "-c", \
+    "rm -rf /run/nordvpn && mkdir -p /run/nordvpn && \
     /etc/init.d/nordvpn start && \
     timeout 30 bash -c 'until nordvpn status &>/dev/null; do sleep 1; done' && \
     trap '/etc/init.d/nordvpn stop; exit 0' SIGTERM SIGINT; \
