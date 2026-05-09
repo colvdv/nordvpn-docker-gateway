@@ -4,6 +4,17 @@
 > [!NOTE]
 > This is an unofficial community project utilizing the official NordVPN Linux client.
 
+***Gateway Topology Overview:***
+```mermaid
+graph TD
+    User[Meshnet Device] --> Meshnet[NordVPN Meshnet]
+    Meshnet --> NordVPN[NordVPN Container]
+    
+    subgraph Shared_Network [Shared Network]
+        NordVPN <--> App[App Container]
+    end
+```
+
 ## Why this guide?
  - **🚫 Third-Party Bloat:** Most online tutorials rely on third-party images (Gluetun, Bubuntux, etc.). This guide uses the official NordVPN Linux client built into a custom image. *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
  - **🔒 Security Sandbox:** Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet), this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.
