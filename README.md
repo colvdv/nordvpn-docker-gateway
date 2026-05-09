@@ -62,7 +62,7 @@ ENTRYPOINT ["/bin/bash", "-c", \
 ```
 Remember to update/remove the `nordvpn` version tag (`=4.6.0`) to pull the desired/latest linux release.
 
-This Dockerfile is a slightly modified version of the one we are instructed to create when following [the official guide on 'How to build the NordVPN Docker image'](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image). For an explanation on what we've changed and why, [read this](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile-differences.md).
+This Dockerfile is a reasonably modified version of the one we are instructed to create when following [the official guide on 'How to build the NordVPN Docker image'](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image). For an explanation on what we've changed and why, [read this](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile-differences.md).
 
 ### ⚙️ 2. Setup & Build
 Create a persistent directory to keep your NordVPN login and Meshnet settings safe across container restarts:
