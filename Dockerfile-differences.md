@@ -6,6 +6,7 @@ Here are the specific differences between the two `Dockerfile`s broken down by c
  - **Immutable Base Image:** We use a specific digest (`ubuntu:24.04@sha256:...`) rather than a generic tag. This ensures that every build is identical and protected against "poisoned" base image updates.
  - **GPG Fingerprint Verification:** Before installing the NordVPN package, our script performs a dry-run GPG import to verify the public key fingerprint. This prevents Man-in-the-Middle (MITM) attacks during the build process.
  - **Modern Keyring Management:** We follow the latest Debian/Ubuntu security standards by using `/usr/share/keyrings/` and the `signed-by` flag, rather than the deprecated `apt-key` or `trusted.gpg.d` methods used in the OFFICIAL script.
+ - **Least Privilege Execution:** Unlike the official image which runs everything as root, our version creates a dedicated `norduser` and uses `gosu` to drop privileges, significantly reducing the attack surface.
  
 ### 2. Package Management & Reproducibility
 While the OFFICIAL Dockerfile contains redundancies, our Custom Dockerfile focuses on optimization and predictable deployments.
@@ -15,11 +16,12 @@ While the OFFICIAL Dockerfile contains redundancies, our Custom Dockerfile focus
 
 ### 3. Service Reliability & Health Monitoring
 A container that "starts" isn't always "working." Our Custom Dockerfile adds intelligence to the container lifecycle.
- - **Automated Healthcheck:** We include a `HEALTHCHECK` instruction that polls the NordVPN daemon every 30 seconds. If the daemon crashes or becomes unresponsive, Docker can automatically restart the container or alert the maintainer.
+ - **Automated Healthcheck:** We include a `HEALTHCHECK` instruction that polls the NordVPN daemon every 30 seconds. If the daemon crashes or loses its connection state, Docker can automatically flag the container as unhealthy or trigger a restart.
  - **Daemon Readiness Polling:** The OFFICIAL script uses a blunt `sleep 5` to wait for the service. Our Custom script uses a smart `until` loop that polls the daemon’s status, proceeding only when the service is actually ready.
- - **Stale File Cleanup:** We explicitly run `rm -rf /run/nordvpn` at startup. This prevents the "stale socket" error that often causes the OFFICIAL container to fail if it wasn't shut down gracefully previously.
+ - **Pre-Flight Validation:** Our entrypoint checks for required `NET_ADMIN` capabilities and the `/dev/net/tun` device immediately. Instead of failing silently or cryptically, it provides clear error messages if the environment is not configured correctly.
 
 ### 4. Signal Handling & Persistence
 The method of execution determines how the container responds to the environment.
- - **Graceful Shutdown:** Our Custom Dockerfile uses the Exec form (`ENTRYPOINT ["/bin/bash", "-c", ...]`) combined with a trap for `SIGTERM` and `SIGINT`. This allows the NordVPN service to shut down cleanly and disconnect when the container is stopped.
- - **Service-Oriented Loop:** Instead of dropping into a bash shell, our version uses a non-blocking `while` loop (`wait $!`). This keeps the container alive indefinitely as a stable network gateway for other services to route through, a persistent, "always-on" architecture.
+ - **Stale File Cleanup:** We explicitly run `rm -rf /run/nordvpn` at startup. This prevents the "stale socket" error that often causes the OFFICIAL container to fail if it wasn't shut down gracefully in a previous session.
+ - **Graceful Shutdown:** Our Custom Dockerfile uses a `trap` for `SIGTERM` and `SIGINT`. This allows the NordVPN service to trigger its official stop script and disconnect cleanly when the container is stopped, preventing IP leaks or routing hang-ups.
+ - **Service-Oriented Loop:** Instead of dropping into a generic bash shell, our version uses a non-blocking while loop that monitors the nordvpnd process. This keeps the container alive as a stable network gateway, ensuring an "always-on" architecture for your services.
