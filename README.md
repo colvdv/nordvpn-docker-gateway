@@ -5,11 +5,12 @@
   </a>
 </h1>
 
-<p align="right">
-  <a href="https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway">
-    <img src="https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway/badge" alt="CodeFactor" align="right" />
-  </a>
-</p>
+<a href="https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway">
+  <img src="https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway/badge" alt="CodeFactor" align="right" />
+</a>
+<a href="https://app.codacy.com/gh/colvdv/nordvpn-docker-gateway/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
+  <img src="https://app.codacy.com/project/badge/Grade/81e60993506b4030be253df5c58f2513" alt="Codacy Badge" align="right" />
+</a>
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/commits)
 [![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/releases)
