@@ -11,7 +11,7 @@ Here are the specific differences between the two `Dockerfile`s broken down by c
 ### 2. Package Management & Reproducibility
 While the OFFICIAL Dockerfile contains redundancies, our Custom Dockerfile focuses on optimization and predictable deployments.
  - **Version Pinning:** Our script pins the client to a specific version (`nordvpn=4.6.0`). This prevents "broken builds" caused by unexpected upstream updates, ensuring consistent behavior across all deployments.
- - **Optimized Build Layer:** We consolidated dependencies into a single layer and removed the redundant apt-get install calls found in the OFFICIAL version.
+ - **Optimized Build Layer:** We consolidated dependencies into a single layer and removed the redundant `apt-get install` calls found in the OFFICIAL version.
  - **Networking Toolset:** We include `iproute2` and `iptables`. These are essential for the VPN client to manipulate routing tables and firewall rules, which are necessary to establish a functional tunnel.
 
 ### 3. Service Reliability & Health Monitoring
