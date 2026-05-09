@@ -1,6 +1,10 @@
-# NordVPN Docker Gateway
+<h1>
+  NordVPN Docker Gateway
+  <img align="right" src="https://img.shields.io/github/stars/colvdv/nordvpn-docker-gateway" alt="Stars">
+</h1>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)
+![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)
 ![GitHub repo size](https://img.shields.io/github/repo-size/colvdv/nordvpn-docker-gateway)
 ![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)
 ![License](https://img.shields.io/badge/license-MIT-blue)
