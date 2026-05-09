@@ -8,19 +8,29 @@
  - **🚫 Third-Party Bloat:** Most online tutorials rely on third-party images (Gluetun, Bubuntux, etc.). This guide uses the official NordVPN Linux client built into a custom image. *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
  - **🔒 Security Sandbox:** Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet), this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.
 
-## Instructions - ([v1.2.0](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.0))
+## Instructions - ([v1.2.2](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.2))
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker container for NordVPN. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
 ### 🛠️ 1. Create the Dockerfile for the NordVPN Container
 Create a directory (e.g. `sudo mkdir ~/nordvpn-meshnet/`), open it (e.g. `cd ~/nordvpn-meshnet/`) and save the following as `Dockerfile` inside it (e.g. `sudo nano Dockerfile`, keyboard shortcut `Shift+Insert` to paste with formatting, then `Ctrl+X` to save, followed by `y` to confirm saving, then `Enter` to confirm filename):
 
 ```
+# REQUIRED RUNTIME ARGUMENTS:
+# --cap-add=NET_ADMIN 
+# --cap-add=NET_RAW
+# --device /dev/net/tun
+#
+# JUSTIFICATION:
+# NET_ADMIN: Required for NordVPN to modify routing tables and iptables.
+# NET_RAW: Required for NordVPN to create and manage raw sockets.
+# /dev/net/tun: Required for the creation of the VPN tunnel interface.
+
 FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b
 
 LABEL org.opencontainers.image.authors="COLVDV" \
       org.opencontainers.image.title="NordVPN Docker Gateway" \
       org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
-      org.opencontainers.image.version="1.2.0" \
+      org.opencontainers.image.version="1.2.2" \
       org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
       org.opencontainers.image.licenses="MIT" \
       capabilities.net_admin="required" \
@@ -33,6 +43,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     iproute2 \
     iptables \
+    gosu \
     && mkdir -p -m 0700 /root/.gnupg \
     && wget -qO /tmp/nordvpn.asc https://repo.nordvpn.com/gpg/nordvpn_public.asc \
     # Verify fingerprint to prevent MITM attacks
@@ -42,23 +53,34 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update \
     # Pinned to specific NordVPN version (4.6.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
     && apt-get install -y --no-install-recommends nordvpn=4.6.0 \
+    # Create a non-privileged user and add them to the 'nordvpn' group
+    && groupadd -r norduser && useradd -m -g norduser -G nordvpn norduser \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/nordvpn.asc /root/.gnupg
 
-# HEALTHCHECK: Ensures the daemon is responsive and NordVPN is in a valid state
+# HEALTHCHECK: Uses gosu to check status as the non-privileged user
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-    CMD nordvpn status | grep -qE "Status: Disconnected|Status: Connected" || exit 1
+    CMD gosu norduser nordvpn status | grep -qE "Status: Disconnected|Status: Connected" || exit 1
 
-# Entrypoint Logic
+# ENTRYPOINT LOGIC
+# Checks for NET_ADMIN & NET_RAW capabilities
+# Checks for TUN device
 # Clears stale PID/socket files to prevent startup failure after unclean shutdowns
 # Polls for daemon readiness before proceeding
 # Graceful shutdown handler
+# Starts as root, does the networking, then HANDS OVER the process to norduser.
 ENTRYPOINT ["/bin/bash", "-c", \
-    "rm -rf /run/nordvpn && mkdir -p /run/nordvpn && \
+    "set -e; \
+    if ! iptables -L -n > /dev/null 2>&1; then echo 'ERROR: Missing capabilities.'; exit 1; fi; \
+    if [ ! -c /dev/net/tun ]; then echo 'ERROR: /dev/net/tun not found.'; exit 1; fi; \
+    rm -rf /run/nordvpn && mkdir -p /run/nordvpn && \
+    chown -R root:nordvpn /run/nordvpn /var/lib/nordvpn && \
+    chmod 770 /run/nordvpn /var/lib/nordvpn; \
     /etc/init.d/nordvpn start && \
     timeout 30 bash -c 'until nordvpn status &>/dev/null; do sleep 1; done' && \
     trap '/etc/init.d/nordvpn stop; exit 0' SIGTERM SIGINT; \
-    while true; do sleep 10 & wait $!; done"]
+    echo 'Initialization complete. Handing over to norduser...'; \
+    exec gosu norduser bash -c 'while pgrep nordvpnd > /dev/null; do sleep 5; done; echo \"Daemon exited. Shutting down.\"; exit 1'"]
 ```
 Remember to update/remove the `nordvpn` version tag (`=4.6.0`) to pull the desired/latest linux release.
 
