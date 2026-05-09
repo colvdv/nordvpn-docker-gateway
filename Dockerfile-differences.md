@@ -6,7 +6,7 @@ Here are the specific differences between the two `Dockerfile`s broken down by c
  - **Immutable Base Image:** We use a specific digest (`ubuntu:24.04@sha256:...`) rather than a generic tag. This ensures that every build is identical and protected against "poisoned" base image updates.
  - **GPG Fingerprint Verification:** Before installing the NordVPN package, our script performs a dry-run GPG import to verify the public key fingerprint. This prevents Man-in-the-Middle (MITM) attacks during the build process.
  - **Modern Keyring Management:** We follow the latest Debian/Ubuntu security standards by using `/usr/share/keyrings/` and the `signed-by` flag, rather than the deprecated `apt-key` or `trusted.gpg.d` methods used in the OFFICIAL script.
- - **Least Privilege Execution:** Unlike the official image which runs everything as root, our version creates a dedicated `norduser` and uses `gosu` to drop privileges, significantly reducing the attack surface.
+ - **Least Privilege Execution:** Unlike the official image which runs everything as `root`, our version creates a dedicated `norduser` and uses `gosu` to drop privileges, significantly reducing the attack surface.
  
 ### 2. Package Management & Reproducibility
 While the OFFICIAL Dockerfile contains redundancies, our Custom Dockerfile focuses on optimization and predictable deployments.
@@ -24,4 +24,4 @@ A container that "starts" isn't always "working." Our Custom Dockerfile adds int
 The method of execution determines how the container responds to the environment.
  - **Stale File Cleanup:** We explicitly run `rm -rf /run/nordvpn` at startup. This prevents the "stale socket" error that often causes the OFFICIAL container to fail if it wasn't shut down gracefully in a previous session.
  - **Graceful Shutdown:** Our Custom Dockerfile uses a `trap` for `SIGTERM` and `SIGINT`. This allows the NordVPN service to trigger its official stop script and disconnect cleanly when the container is stopped, preventing IP leaks or routing hang-ups.
- - **Service-Oriented Loop:** Instead of dropping into a generic bash shell, our version uses a non-blocking `while loop` that monitors the nordvpnd process. This keeps the container alive as a stable network gateway, ensuring an "always-on" architecture for your services.
+ - **Service-Oriented Loop:** Instead of dropping into a generic bash shell, our version uses a non-blocking `while loop` that monitors the `nordvpnd` process. This keeps the container alive as a stable network gateway, ensuring an "always-on" architecture for your services.
