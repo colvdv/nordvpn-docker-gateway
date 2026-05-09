@@ -1,13 +1,15 @@
 <h1>
   NordVPN Docker Gateway
-  <img align="right" src="https://img.shields.io/github/stars/colvdv/nordvpn-docker-gateway" alt="Stars">
+  <a href="https://github.com/colvdv/nordvpn-docker-gateway/stargazers">
+    <img align="right" src="https://img.shields.io/github/stars/colvdv/nordvpn-docker-gateway?style=social" alt="Star Repo">
+  </a>
 </h1>
 
-![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)
-![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)
-![GitHub repo size](https://img.shields.io/github/repo-size/colvdv/nordvpn-docker-gateway)
-![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)
-![License](https://img.shields.io/badge/license-MIT-blue)
+[![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/commits)
+[![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/releases)
+[![GitHub repo size](https://img.shields.io/github/repo-size/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/archive/refs/heads/main.zip)
+[![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)](https://github.com/colvdv/nordvpn-docker-gateway/graphs/languages)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/LICENSE)
 
 ### **[GUIDE] Route any Docker Container through the official NordVPN Linux Client in a Custom Docker Image (with Meshnet access) without 3rd-Party Tools or Exposing LAN**
 
