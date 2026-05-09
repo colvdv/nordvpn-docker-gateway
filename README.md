@@ -1,4 +1,10 @@
 # NordVPN Docker Gateway
+
+![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)
+![GitHub repo size](https://img.shields.io/github/repo-size/colvdv/nordvpn-docker-gateway)
+![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 ### **[GUIDE] Route any Docker Container through the official NordVPN Linux Client in a Custom Docker Image (with Meshnet access) without 3rd-Party Tools or Exposing LAN**
 
 > [!NOTE]
