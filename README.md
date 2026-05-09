@@ -5,6 +5,12 @@
   </a>
 </h1>
 
+<p align="right">
+  <a href="https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway">
+    <img src="https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway/badge" alt="CodeFactor" align="right" />
+  </a>
+</p>
+
 [![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/commits)
 [![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/releases)
 [![GitHub repo size](https://img.shields.io/github/repo-size/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/archive/refs/heads/main.zip)
