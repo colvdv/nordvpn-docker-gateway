@@ -41,6 +41,13 @@ graph TD
 ## Instructions - ([v1.2.2](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.2))
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
+### 📋 0. Prerequisites
+ - **Docker** installed on a Linux-based host (specifically `amd64` architecture).
+ - **Kernel TUN Module:** Your host kernel must have the `TUN` module enabled to create the VPN tunnel.
+ - **Network Privileges:** The ability to grant the container `NET_ADMIN` and `NET_RAW` capabilities.
+ - **Local Data Directory:** A folder (e.g., `./data`) on your host to persist NordVPN container configuration and Meshnet settings.
+ - **Terminal Access:** Basic proficiency with the CLI to run build and deployment commands.
+
 ### 🛠️ 1. Create the Dockerfile for the NordVPN Container
 Create a directory (e.g. `sudo mkdir ~/nordvpn-meshnet/`), open it (e.g. `cd ~/nordvpn-meshnet/`) and save the following as `Dockerfile` inside it (e.g. `sudo nano Dockerfile`, keyboard shortcut `Shift+Insert` to paste with formatting, then `Ctrl+X` to save, followed by `y` to confirm saving, then `Enter` to confirm filename):
 
