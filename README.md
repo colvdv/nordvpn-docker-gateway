@@ -33,7 +33,7 @@ graph TD
  - **🚫 Third-Party Bloat:** Most online tutorials rely on third-party images (Gluetun, Bubuntux, etc.). This guide uses the official NordVPN Linux client built into a custom image. *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
  - **🔒 Security Sandbox:** Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet), this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.
 
-## Instructions - ([v1.2.2](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.2))
+## Instructions - ([v1.2.3](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.3))
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
 ### 📋 0. Prerequisites
@@ -62,7 +62,7 @@ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194
 LABEL org.opencontainers.image.authors="COLVDV" \
       org.opencontainers.image.title="NordVPN Docker Gateway" \
       org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
-      org.opencontainers.image.version="1.2.2" \
+      org.opencontainers.image.version="1.2.3" \
       org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
       org.opencontainers.image.licenses="MIT" \
       capabilities.net_admin="required" \
@@ -80,7 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && wget -qO /tmp/nordvpn.asc https://repo.nordvpn.com/gpg/nordvpn_public.asc \
     # Verify fingerprint to prevent MITM attacks
     && gpg --dry-run --quiet --import --import-options show-only /tmp/nordvpn.asc | grep -q "BC5480EFEC5C081CE5BCFBE26B219E535C964CA1" \
-    && cat /tmp/nordvpn.asc | gpg --dearmor > /usr/share/keyrings/nordvpn-keyring.gpg \
+   && gpg --dearmor < /tmp/nordvpn.asc > /usr/share/keyrings/nordvpn-keyring.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
     && apt-get update \
     # Pinned to specific NordVPN version (4.6.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
