@@ -13,7 +13,7 @@ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194
 LABEL org.opencontainers.image.authors="COLVDV" \
       org.opencontainers.image.title="NordVPN Docker Gateway" \
       org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
-      org.opencontainers.image.version="1.2.3" \
+      org.opencontainers.image.version="1.2.4" \
       org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
       org.opencontainers.image.licenses="MIT" \
       capabilities.net_admin="required" \
@@ -46,21 +46,36 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
     CMD gosu norduser nordvpn status | grep -qE "Status: Disconnected|Status: Connected" || exit 1
 
 # ENTRYPOINT LOGIC
-# Checks for NET_ADMIN & NET_RAW capabilities
-# Checks for TUN device
-# Clears stale PID/socket files to prevent startup failure after unclean shutdowns
-# Polls for daemon readiness before proceeding
-# Graceful shutdown handler
-# Starts as root, does the networking, then HANDS OVER the process to norduser.
-ENTRYPOINT ["/bin/bash", "-c", \
+# 1. Environment & Capability Verification (NET_ADMIN, NET_RAW, and TUN device)
+# 2. State Cleansing (Wipes stale PID/socket files to prevent boot loops after crashes)
+# 3. Interruptible Signal Trap Management (Captures SIGTERM/SIGINT as PID 1 root shell)
+# 4. Privileged Initialization (Spins up daemon and checks readiness as norduser via gosu)
+# 5. Non-Privileged Persistent Monitoring (Spawns a background health loop as norduser)
+# 6. Safe Shell Supervision (Root process blocks responsively via wait, ensuring clean teardown)
+ENTRYPOINT ["/usr/bin/env", "bash", "-c", \
     "set -e; \
     if ! iptables -L -n > /dev/null 2>&1; then echo 'ERROR: Missing capabilities.'; exit 1; fi; \
     if [ ! -c /dev/net/tun ]; then echo 'ERROR: /dev/net/tun not found.'; exit 1; fi; \
     rm -rf /run/nordvpn && mkdir -p /run/nordvpn && \
     chown -R root:nordvpn /run/nordvpn /var/lib/nordvpn && \
     chmod 770 /run/nordvpn /var/lib/nordvpn; \
-    /etc/init.d/nordvpn start && \
-    timeout 30 bash -c 'until nordvpn status &>/dev/null; do sleep 1; done' && \
-    trap '/etc/init.d/nordvpn stop; exit 0' SIGTERM SIGINT; \
-    echo 'Initialization complete. Handing over to norduser...'; \
-    exec gosu norduser bash -c 'while pgrep nordvpnd > /dev/null; do sleep 5; done; echo \"Daemon exited. Shutting down.\"; exit 1'"]
+    \
+    trap 'echo \"SIGTERM received. Stopping NordVPN daemon gracefully as root...\"; /etc/init.d/nordvpn stop; exit 0' SIGTERM SIGINT; \
+    \
+    /etc/init.d/nordvpn start; \
+    \
+    timeout 30 gosu norduser bash -c 'until nordvpn status &>/dev/null; do sleep 1; done'; \
+    echo 'Initialization complete. Launching persistent monitor...'; \
+    \
+    gosu norduser bash -c 'while true; do if ! nordvpn status | grep -qE \"Status: Disconnected|Status: Connected\"; then exit 1; fi; sleep 5; done' & \
+    MONITOR_PID=$!; \
+    \
+    while kill -0 $MONITOR_PID 2>/dev/null; do \
+        sleep 2 & wait $!; \
+    \
+    done; \
+    \
+    trap - SIGTERM SIGINT; \
+    echo 'NordVPN client reporting unhealthy status. Exiting.'; \
+    /etc/init.d/nordvpn stop; \
+    exit 1"]
