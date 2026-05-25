@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main", "master" ]
     paths:
-      - 'Dockerfile' # Triggers strictly and beautifully only when the Dockerfile changes
-  workflow_dispatch: # Allows you to manually click a button in the UI to run this
+      - 'Dockerfile' # Triggers strictly only when the Dockerfile changes
+  workflow_dispatch: # Allows you to manually click a button in the browser UI to run this at will
 
 env:
   REGISTRY: ghcr.io
@@ -20,9 +20,9 @@ jobs:
       packages: write   # Required to publish seamlessly to GitHub Container Registry
 
     steps:
-      # Pinned to actions/checkout v4.2.2
+      # Robust and universally accessible checkout layer
       - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v4
 
       # Defensively eliminates character vulnerabilities using printf hygiene
       - name: Normalize Pipeline Names and Paths
@@ -47,26 +47,25 @@ jobs:
           echo "Extracted Version: $VERSION"
           printf "VERSION=%s\n" "$VERSION" >> "$GITHUB_OUTPUT"
 
-      # Pinned to docker/setup-qemu-action v3.4.0
+      # Virtualization layer to build ARM64 images on standard x86_64 runners
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@49b3bc8e6db44a23024515038f12386227e38093
+        uses: docker/setup-qemu-action@v3
 
-      # Pinned to docker/setup-buildx-action v3.8.0
+      # Advanced build automation mechanics
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@c1676c98522e2342c430c79ecbc581d59bc4309a
+        uses: docker/setup-buildx-action@v3
 
-      # Pinned to docker/login-action v3.3.0
+      # Authenticates with the GitHub Container Registry securely
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@0d4c94d3283f640994f7112028fae9da74dfef54
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Pinned to docker/build-push-action v6.10.0
       # Multi-arch compilation deploying to your normalized registry configuration
       - name: Build and Push Live Multi-Arch Docker Image
-        uses: docker/build-push-action@af517c182621454142647c4e207a6ec06c3a2168
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -79,10 +78,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Pinned to docker/build-push-action v6.10.0
       # Registry naming prefix added for absolute configuration alignment on local loads
       - name: Export Docker Image Tarball
-        uses: docker/build-push-action@af517c182621454142647c4e207a6ec06c3a2168
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
