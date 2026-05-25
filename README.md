@@ -37,7 +37,7 @@ graph TD
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
 > [!IMPORTANT]
-> I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/runs/26382756311) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (`nordvpn-docker-gateway.tar.gz`) to the relevant release, starting with [v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). [View Package](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
+> I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/runs/26382756311) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (e.g.`nordvpn-docker-gateway-v1.x.x.tar.gz`) to the relevant release, starting with [v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). [View Package](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
 
 <details>
 <summary><h3 style="display:inline">📋 0. Prerequisites</h3></summary>
