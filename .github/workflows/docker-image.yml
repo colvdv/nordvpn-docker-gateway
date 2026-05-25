@@ -31,7 +31,7 @@ jobs:
       - name: Normalize Pipeline Names and Paths
         run: |
           LOWERCASE_IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          SAFE_REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9._-' '-')
+          SAFE_REPO_NAME="nordvpn-docker-gateway"
           printf "IMAGE_NAME=%s\n" "$LOWERCASE_IMAGE_NAME" >> "$GITHUB_ENV"
           printf "SAFE_REPO_NAME=%s\n" "$SAFE_REPO_NAME" >> "$GITHUB_ENV"
 
