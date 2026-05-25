@@ -36,6 +36,9 @@ graph TD
 ## Instructions - ([v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5))
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
+> [!IMPORTANT]
+> I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/runs/26382756311) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (`nordvpn-docker-gateway-.tar.gz`) to the relevant release, starting with [v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). [View Package](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
+
 <details>
 <summary><h3 style="display:inline">📋 0. Prerequisites</h3></summary>
   
@@ -48,7 +51,6 @@ This guide will walk you through the creation of all of the files, their content
 </details>
 <details>
 <summary><h3 style="display:inline">🛠️ 1. Create the Dockerfile for the NordVPN Container</h3></summary>
-
 
 Create a directory (e.g. `mkdir ~/nordvpn-meshnet/`), open it (e.g. `cd ~/nordvpn-meshnet/`) and save the following as `Dockerfile` inside it (e.g. `nano Dockerfile`, keyboard shortcut `Shift+Insert` to paste with formatting, then `Ctrl+X` to save, followed by `y` to confirm saving, then `Enter` to confirm filename):
 
@@ -141,10 +143,6 @@ Remember to update/remove the `nordvpn` version tag (`=4.6.0`) to pull the desir
 This Dockerfile is a reasonably modified version of the one we are instructed to create when following [the official guide on 'How to build the NordVPN Docker image'](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image). For an explanation on what we've changed and why, [read this](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile-differences.md).
 
 </details>
-
-> [!IMPORTANT]
-> I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/runs/26382756311) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (`nordvpn-docker-gateway-.tar.gz`) to the relevant release, starting with [v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). [View Package](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
-
 <details>
 <summary><h3 style="display:inline">⚙️ 2. Setup & Build</h3></summary>
 
