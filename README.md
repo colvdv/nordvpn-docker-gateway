@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81e60993506b4030be253df5c58f2513)](https://app.codacy.com/gh/colvdv/nordvpn-docker-gateway/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![CodeFactor](https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway/badge)](https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway)
-![Docker Image CI](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml/badge.svg)
+[![Docker Image CI](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml/badge.svg)](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml)
 
 ### **[GUIDE] Route any Docker Container through the official NordVPN Linux Client in a Custom Docker Image (with Meshnet access) without 3rd-Party Tools or Exposing LAN**
 
