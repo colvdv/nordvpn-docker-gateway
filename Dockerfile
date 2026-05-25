@@ -13,7 +13,7 @@ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194
 LABEL org.opencontainers.image.authors="COLVDV" \
       org.opencontainers.image.title="NordVPN Docker Gateway" \
       org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
-      org.opencontainers.image.version="1.2.4" \
+      org.opencontainers.image.version="1.2.5" \
       org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
       org.opencontainers.image.licenses="MIT" \
       capabilities.net_admin="required" \
@@ -31,8 +31,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && wget -qO /tmp/nordvpn.asc https://repo.nordvpn.com/gpg/nordvpn_public.asc \
     # Verify fingerprint to prevent MITM attacks
     && gpg --dry-run --quiet --import --import-options show-only /tmp/nordvpn.asc | grep -q "BC5480EFEC5C081CE5BCFBE26B219E535C964CA1" \
-   && gpg --dearmor < /tmp/nordvpn.asc > /usr/share/keyrings/nordvpn-keyring.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
+    && gpg --dearmor < /tmp/nordvpn.asc > /usr/share/keyrings/nordvpn-keyring.gpg \
+    && dpkg_arch="$(dpkg --print-architecture)" \
+    && echo "deb [arch=$dpkg_arch signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
     && apt-get update \
     # Pinned to specific NordVPN version (4.6.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
     && apt-get install -y --no-install-recommends nordvpn=4.6.0 \
