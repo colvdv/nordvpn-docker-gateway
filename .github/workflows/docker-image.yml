@@ -21,8 +21,9 @@ jobs:
       packages: write
 
     steps:
+      # Pinned to actions/checkout@v4.2.2 (SHA verified)
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Normalize Pipeline Names and Paths
         run: |
@@ -38,21 +39,25 @@ jobs:
           if [ -z "$VERSION" ]; then exit 1; fi
           printf "VERSION=%s\n" "$VERSION" >> "$GITHUB_OUTPUT"
 
+      # Pinned to docker/setup-qemu-action@v3.4.0 (SHA verified)
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@45956037a50742f360773d57f0f67026715f4e17
 
+      # Pinned to docker/setup-buildx-action@v3.8.0 (SHA verified)
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@f7ce35c1766657218652d7e007823118d095908e
 
+      # Pinned to docker/login-action@v3.3.0 (SHA verified)
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Pinned to docker/build-push-action@v6.10.0 (SHA verified)
       - name: Build and Push Live Multi-Arch Docker Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@a8755695627252277d3f82064506c098901b0f58
         with:
           context: .
           file: ./Dockerfile
@@ -65,8 +70,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Pinned to docker/build-push-action@v6.10.0 (SHA verified)
       - name: Export Docker Image Tarball
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@a8755695627252277d3f82064506c098901b0f58
         with:
           context: .
           file: ./Dockerfile
