@@ -45,15 +45,15 @@ jobs:
 
       # QEMU
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4.0.0
 
       # Buildx with provenance enabled at engine level
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4.1.0
 
       # Login
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4.2.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -62,7 +62,7 @@ jobs:
       # Build + Push with SBOM + provenance
       - name: Build and Push Multi-Arch Image
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7.2.0
         with:
           context: .
           file: ./Dockerfile
@@ -83,7 +83,7 @@ jobs:
 
       # Install Cosign (keyless signing tool)
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3
+        uses: sigstore/cosign-installer@v4.1.2
 
       # Sign image digest (keyless via GitHub OIDC)
       - name: Sign Container Image
@@ -102,7 +102,7 @@ jobs:
 
       # Attach tarball to release
       - name: Export Docker Image Tarball
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7.2.0
         with:
           context: .
           file: ./Dockerfile
