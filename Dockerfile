@@ -80,4 +80,3 @@ ENTRYPOINT ["/usr/bin/env", "bash", "-c", \
     echo 'NordVPN client reporting unhealthy status. Exiting.'; \
     /etc/init.d/nordvpn stop; \
     exit 1"]
-# This line to trigger GitHub Action build
