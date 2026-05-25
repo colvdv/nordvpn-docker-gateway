@@ -36,14 +36,20 @@ graph TD
 ## Instructions - ([v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5))
 This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
-### 📋 0. Prerequisites
+<details>
+<summary><h3 style="display:inline">📋 0. Prerequisites</h3></summary>
+  
  - **Docker** installed on a Linux-based host.
  - **Kernel TUN Module:** Your host kernel must have the `TUN` module enabled to create the VPN tunnel.
  - **Network Privileges:** The ability to grant the container `NET_ADMIN` and `NET_RAW` capabilities.
  - **Local Data Directory:** A folder (e.g., `./data`) on your host to persist NordVPN container configuration and Meshnet settings.
  - **Terminal Access:** Basic proficiency with the CLI to run build and deployment commands.
 
-### 🛠️ 1. Create the Dockerfile for the NordVPN Container
+</details>
+<details>
+<summary><h3 style="display:inline">🛠️ 1. Create the Dockerfile for the NordVPN Container</h3></summary>
+
+
 Create a directory (e.g. `mkdir ~/nordvpn-meshnet/`), open it (e.g. `cd ~/nordvpn-meshnet/`) and save the following as `Dockerfile` inside it (e.g. `nano Dockerfile`, keyboard shortcut `Shift+Insert` to paste with formatting, then `Ctrl+X` to save, followed by `y` to confirm saving, then `Enter` to confirm filename):
 
 ```
@@ -134,7 +140,14 @@ Remember to update/remove the `nordvpn` version tag (`=4.6.0`) to pull the desir
 
 This Dockerfile is a reasonably modified version of the one we are instructed to create when following [the official guide on 'How to build the NordVPN Docker image'](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image). For an explanation on what we've changed and why, [read this](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile-differences.md).
 
-### ⚙️ 2. Setup & Build
+</details>
+
+> [!IMPORTANT]
+> I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/runs/26382756311) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (`nordvpn-docker-gateway-.tar.gz`) to the relevant release, starting with [v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). [View Package](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
+
+<details>
+<summary><h3 style="display:inline">⚙️ 2. Setup & Build</h3></summary>
+
 Create a persistent directory to keep your NordVPN login and Meshnet settings safe across container restarts:
 ```
 mkdir ~/nordvpn-meshnet/data
@@ -144,7 +157,10 @@ Build the nordvpn-docker image *(note: remember the dot at the end of the comman
 docker build -t nordvpn-docker .
 ```
 
-### 🚀 3. Deploy the NordVPN Gateway Container
+</details>
+<details>
+<summary><h3 style="display:inline">🚀 3. Deploy the NordVPN Gateway Container</h3></summary>
+
 Run the container with the necessary networking permissions.
 (**Note:** For audiobookshelf we map port `13378` on the host to port `80` in the container. Because our app will share this network, it will be accessible via port 80, *or specify your preferred port*.):
 ```
@@ -164,7 +180,10 @@ docker run -d \
 > [!TIP]
 > **Pro Tip:** After starting the NordVPN Docker Container, interact with NordVPN using the following command format `docker exec -it nordvpn-meshnet nordvpn <COMMAND>` (e.g. `docker exec -it nordvpn-meshnet nordvpn login --token <YOUR_TOKEN>` to [login to your NordVPN account using a token](https://support.nordvpn.com/hc/en-us/articles/20286980309265-How-to-use-a-token-with-NordVPN-on-Linux)).
 
-### 🔗 4. Link your Application Container (audiobookshelf Example)
+</details>
+<details>
+<summary><h3 style="display:inline">🔗 4. Link your Application Container (audiobookshelf Example)</h3></summary>
+
 In your application’s (audiobookshelf) `docker-compose.yml` (e.g., `~/audiobookshelf/docker-compose.yml`), the "magic" happens with `network_mode`.
 ```
 services:
@@ -191,8 +210,13 @@ Change the volume directories specified in the `docker-compose.yml` above to fit
 
 This `docker-compose.yml` is a slightly modified version of the one we are instructed to create when following [the official audiobookshelf guide for Docker Compose](https://www.audiobookshelf.org/docs/#docker-compose-install); instead of specifying the ports here, we've bound the application's network identity to the NordVPN container (`nordvpn-meshnet`), and in step 3 we mapped port `13378` to port `80` *(or the one you specified)* in the NordVPN container already. Your port mappings may be different depending on the application you are working with; *see your application's documentation for more information.*
 
-### ✨ 5. Deploy the Application Container
+</details>
+<details>
+<summary><h3 style="display:inline">✨ 5. Deploy the Application Container</h3></summary>
+
 Run the container: `docker compose up -d`
+
+</details>
 
 ## Conclusion & Notes 🎉
 The NordVPN Container (`nordvpn-meshnet`) should now access the `audiobookshelf` container successfully, hurray!
