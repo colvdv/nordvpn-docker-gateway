@@ -5,6 +5,7 @@ on:
     branches: [ "main", "master" ]
     paths:
       - 'Dockerfile' # Triggers strictly and beautifully only when the Dockerfile changes
+  workflow_dispatch: # Allows you to manually click a button in the UI to run this
 
 env:
   REGISTRY: ghcr.io
