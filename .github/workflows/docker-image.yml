@@ -11,6 +11,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ""     # Dynamically populated during the normalization step
   SAFE_REPO_NAME: "" # Dynamically populated during the normalization step
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true" # Proactively enforces the Node 24 runtime ahead of deadlines
 
 jobs:
   build-and-publish:
@@ -20,9 +21,9 @@ jobs:
       packages: write   # Required to publish seamlessly to GitHub Container Registry
 
     steps:
-      # Robust and universally accessible checkout layer
+      # Upgraded to v5 for native Node 24 execution stability
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Defensively eliminates character vulnerabilities using printf hygiene
       - name: Normalize Pipeline Names and Paths
@@ -47,25 +48,25 @@ jobs:
           echo "Extracted Version: $VERSION"
           printf "VERSION=%s\n" "$VERSION" >> "$GITHUB_OUTPUT"
 
-      # Virtualization layer to build ARM64 images on standard x86_64 runners
+      # Upgraded to v4 for Node 24 optimization
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
-      # Advanced build automation mechanics
+      # Upgraded to v4 for Node 24 optimization
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
-      # Authenticates with the GitHub Container Registry securely
+      # Upgraded to v4 for Node 24 optimization
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Multi-arch compilation deploying to your normalized registry configuration
+      # Upgraded to v7: High-performance multi-arch compilation on Node 24 engine
       - name: Build and Push Live Multi-Arch Docker Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
@@ -78,9 +79,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Registry naming prefix added for absolute configuration alignment on local loads
+      # Upgraded to v7: Local archive compiler aligned with modern build engine
       - name: Export Docker Image Tarball
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
