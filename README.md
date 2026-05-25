@@ -6,6 +6,7 @@
 </h1>
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/commits)
+![Docker Image CI](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml/badge.svg)
 [![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/releases)
 [![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile)
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/LICENSE)
