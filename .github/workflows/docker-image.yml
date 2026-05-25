@@ -4,70 +4,55 @@ on:
   push:
     branches: [ "main", "master" ]
     paths:
-      - 'Dockerfile' # Triggers strictly only when the Dockerfile changes
-  workflow_dispatch: # Allows you to manually click a button in the browser UI to run this at will
+      - 'Dockerfile'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ""     # Dynamically populated during the normalization step
-  SAFE_REPO_NAME: "" # Dynamically populated during the normalization step
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true" # Proactively enforces the Node 24 runtime ahead of deadlines
+  IMAGE_NAME: ""
+  SAFE_REPO_NAME: ""
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # Required to securely attach assets to your pre-existing release
-      packages: write   # Required to publish seamlessly to GitHub Container Registry
+      contents: write
+      packages: write
 
     steps:
-      # Pinned to actions/checkout@v4.2.2
       - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v4
 
-      # Defensively eliminates character vulnerabilities using printf hygiene
       - name: Normalize Pipeline Names and Paths
         run: |
           LOWERCASE_IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           SAFE_REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9._-' '-')
-          
           printf "IMAGE_NAME=%s\n" "$LOWERCASE_IMAGE_NAME" >> "$GITHUB_ENV"
           printf "SAFE_REPO_NAME=%s\n" "$SAFE_REPO_NAME" >> "$GITHUB_ENV"
 
-      # Robust semantic version extraction with pristine shell hygiene
       - name: Extract Version Tag from Dockerfile
         id: get_version
         run: |
           VERSION=$(sed -nE 's/.*org\.opencontainers\.image\.version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' Dockerfile)
-          
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not extract OCI version from Dockerfile."
-            exit 1
-          fi
-          
-          echo "Extracted Version: $VERSION"
+          if [ -z "$VERSION" ]; then exit 1; fi
           printf "VERSION=%s\n" "$VERSION" >> "$GITHUB_OUTPUT"
 
-      # Pinned to docker/setup-qemu-action@v3.4.0
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@49b3bc8e6db44a23024515038f12386227e38093
+        uses: docker/setup-qemu-action@v3
 
-      # Pinned to docker/setup-buildx-action@v3.8.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@c1676c98522e2342c430c79ecbc581d59bc4309a
+        uses: docker/setup-buildx-action@v3
 
-      # Pinned to docker/login-action@v3.3.0
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@0d4c94d3283f640994f7112028fae9da74dfef54
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Pinned to docker/build-push-action@v6.10.0
-      # Multi-arch compilation deploying to your normalized registry configuration
       - name: Build and Push Live Multi-Arch Docker Image
-        uses: docker/build-push-action@af517c182621454142647c4e207a6ec06c3a2168
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -80,10 +65,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Pinned to docker/build-push-action@v6.10.0
-      # Registry naming prefix added for absolute configuration alignment on local loads
       - name: Export Docker Image Tarball
-        uses: docker/build-push-action@af517c182621454142647c4e207a6ec06c3a2168
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -91,15 +74,10 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
           outputs: type=docker,dest=/tmp/${{ env.SAFE_REPO_NAME }}.tar
 
-      # Compresses the asset and gracefully appends it to your matching release
       - name: Compress and Attach Tarball to Pre-existing Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION_TAG="v${{ steps.get_version.outputs.VERSION }}"
-          echo "Targeting existing release: $VERSION_TAG"
-          
           gzip -9 "/tmp/${{ env.SAFE_REPO_NAME }}.tar"
-          
-          # Native GH CLI integration injecting the compressed asset cleanly into the target release desk
-          gh release upload "$VERSION_TAG" "/tmp/${{ env.SAFE_REPO_NAME }}.tar.gz" --clobber || echo "Warning: Release $VERSION_TAG not found on GitHub. Image published to registry successfully, but asset skip-applied."
+          gh release upload "$VERSION_TAG" "/tmp/${{ env.SAFE_REPO_NAME }}.tar.gz" --clobber || echo "Warning: Release $VERSION_TAG not found."
