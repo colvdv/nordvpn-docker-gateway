@@ -108,12 +108,12 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
-          outputs: type=docker,dest=/tmp/${{ env.SAFE_REPO_NAME }}.tar
+          outputs: type=docker,dest=/tmp/${{ env.SAFE_REPO_NAME }}-v${{ steps.get_version.outputs.VERSION }}.tar
 
       - name: Compress and Upload to Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION_TAG="v${{ steps.get_version.outputs.VERSION }}"
-          gzip -9 "/tmp/${{ env.SAFE_REPO_NAME }}.tar"
-          gh release upload "$VERSION_TAG" "/tmp/${{ env.SAFE_REPO_NAME }}.tar.gz" --clobber || true
+          gzip -9 "/tmp/${{ env.SAFE_REPO_NAME }}-v${{ steps.get_version.outputs.VERSION }}.tar"
+          gh release upload "$VERSION_TAG" "/tmp/${{ env.SAFE_REPO_NAME }}-v${{ steps.get_version.outputs.VERSION }}.tar.gz" --clobber || true
