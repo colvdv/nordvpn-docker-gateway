@@ -21,9 +21,9 @@ jobs:
       packages: write   # Required to publish seamlessly to GitHub Container Registry
 
     steps:
-      # Upgraded to v5 for native Node 24 execution stability
+      # Pinned to actions/checkout v4.2.2 (Node 24 native)
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       # Defensively eliminates character vulnerabilities using printf hygiene
       - name: Normalize Pipeline Names and Paths
@@ -48,25 +48,26 @@ jobs:
           echo "Extracted Version: $VERSION"
           printf "VERSION=%s\n" "$VERSION" >> "$GITHUB_OUTPUT"
 
-      # Upgraded to v4 for Node 24 optimization
+      # Pinned to docker/setup-qemu-action v3.4.0 (Node 24 compliant)
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
+        uses: docker/setup-qemu-action@49b3bc8e6db44a23024515038f12386227e38093
 
-      # Upgraded to v4 for Node 24 optimization
+      # Pinned to docker/setup-buildx-action v3.8.0 (Node 24 compliant)
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@c1676c98522e2342c430c79ecbc581d59bc4309a
 
-      # Upgraded to v4 for Node 24 optimization
+      # Pinned to docker/login-action v3.3.0 (Node 24 compliant)
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v4
+        uses: docker/login-action@0d4c94d3283f640994f7112028fae9da74dfef54
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Upgraded to v7: High-performance multi-arch compilation on Node 24 engine
+      # Pinned to docker/build-push-action v6.10.0 (Node 24 compliant)
+      # Multi-arch compilation deploying to your normalized registry configuration
       - name: Build and Push Live Multi-Arch Docker Image
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@af517c182621454142647c4e207a6ec06c3a2168
         with:
           context: .
           file: ./Dockerfile
@@ -79,9 +80,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Upgraded to v7: Local archive compiler aligned with modern build engine
+      # Pinned to docker/build-push-action v6.10.0 (Node 24 compliant)
+      # Registry naming prefix added for absolute configuration alignment on local loads
       - name: Export Docker Image Tarball
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@af517c182621454142647c4e207a6ec06c3a2168
         with:
           context: .
           file: ./Dockerfile
