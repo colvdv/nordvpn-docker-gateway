@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "master" ]
     paths:
-      - 'Dockerfile'
+      - '/nordvpn-meshnet/Dockerfile'
   workflow_dispatch:
 
 env:
@@ -39,7 +39,7 @@ jobs:
       - name: Extract Version Tag from Dockerfile
         id: get_version
         run: |
-          VERSION=$(sed -nE 's/.*org\.opencontainers\.image\.version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' Dockerfile)
+          VERSION=$(sed -nE 's/.*org\.opencontainers\.image\.version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' nordvpn-meshnet/Dockerfile)
           if [ -z "$VERSION" ]; then exit 1; fi
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf
         with:
           context: .
-          file: ./Dockerfile
+          file: ./nordvpn-meshnet/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
 
