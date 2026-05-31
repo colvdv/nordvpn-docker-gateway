@@ -39,6 +39,9 @@ This guide will walk you through the creation of all of the files, their content
 > [!IMPORTANT]
 > I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (e.g.`nordvpn-docker-gateway-v1.x.x.tar.gz`) to the relevant release, starting with [`v1.2.5`](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). View the `nordvpn-docker-gateway` package [here](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
 
+> [!NOTE]
+> Instead of using the Docker run command provided in step 3, you can use [this docker-compose.yml](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/docker-compose.yml) to deploy the `nordvpn-meshnet` container. **The instructions below have not yet been updated to reflect the option of using Docker Compose for the `nordvpn-meshnet` container.**
+
 <details>
 <summary><h3 style="display:inline">📋 0. Prerequisites</h3></summary>
   
