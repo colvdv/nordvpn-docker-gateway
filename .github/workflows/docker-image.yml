@@ -105,7 +105,7 @@ jobs:
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf
         with:
           context: .
-          file: ./Dockerfile
+          file: ./nordvpn-meshnet/Dockerfile
           platforms: linux/amd64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
           outputs: type=docker,dest=/tmp/${{ env.SAFE_REPO_NAME }}-v${{ steps.get_version.outputs.VERSION }}.tar
