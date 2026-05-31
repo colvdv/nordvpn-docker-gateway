@@ -1,3 +1,8 @@
+# Example docker-compose.yml for audiobookshelf.
+# 
+# The "magic" happens with network_mode.
+# Remember to map your media and applcation data volume directories.
+
 services:
   audiobookshelf:
     container_name: audiobookshelf
