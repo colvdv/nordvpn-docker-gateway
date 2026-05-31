@@ -2,7 +2,7 @@
 Here are the specific differences between the two `Dockerfile`s broken down by category:
 
 ### 1. Security & Image Integrity
-[Our Custom Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile) implements enterprise-grade security measures that [NordVPN's OFFICIAL Dockerfile](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image) overlooks.
+[Our Custom Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/Dockerfile) implements enterprise-grade security measures that [NordVPN's OFFICIAL Dockerfile](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image) overlooks.
  - **Immutable Base Image:** We use a specific multi-arch digest (`ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b`) rather than a generic tag. This ensures that every build is identical and protected against "poisoned" base image updates.
  - **GPG Fingerprint Verification:** Before installing the NordVPN package, our script performs a dry-run GPG import to verify the public key fingerprint. This prevents Man-in-the-Middle (MITM) attacks during the build process.
  - **Modern Keyring Management:** We follow the latest Debian/Ubuntu security standards by using `/usr/share/keyrings/` and the `signed-by` flag, rather than the deprecated `apt-key` or `trusted.gpg.d` methods used in the OFFICIAL script.
