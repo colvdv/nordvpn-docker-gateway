@@ -1,0 +1,2 @@
+# Purpose of this `/nordvpn-meshnet/data` directory:
+# - Placeholder for the `nordvpn-meshnet` container's persistent data directory for `nordvpn`.
