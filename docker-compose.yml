@@ -1,0 +1,37 @@
+# NordVPN Docker Gateway by COLVDV
+# https://github.com/colvdv/nordvpn-docker-gateway
+#
+# Docker Compose
+# Check the repo above for the most up-to-date version of this docker-compose.yml file.
+#
+# Instructions:
+# 1. Uncomment the appropriate image line to choose which Docker image to use.
+# 2. Uncomment lines to open the appropriate ports.
+# 3. Save this file as docker-compose.yml (e.g. ~/nordvpn-meshnet/docker-compose.yml).
+# 4. Start the `nordvpn-meshnet` container: `docker compose up -d`.
+# 5. Start your application (audiobookshelf, jellyfin, etc.) containers with `network_mode: "container:nordvpn-meshnet"` to link them to the `nordvpn-meshnet` container.
+
+services:
+  nordvpn-meshnet:
+    # Uncomment one image line to choose which Docker image to use:
+    #image: ghcr.io/colvdv/nordvpn-docker-gateway:latest # Pull latest image from GitHub Packages
+    #image: ghcr.io/colvdv/nordvpn-docker-gateway:v1.2.5 # Pull a specific image release from GitHub Packages
+    #image: nordvpn-docker # Use local image, such as one you built yourself.
+    container_name: nordvpn-meshnet
+    hostname: nord-mesh
+    restart: unless-stopped
+    init: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    volumes:
+      - ~/nordvpn-meshnet/data:/var/lib/nordvpn # Set persistent data directory for nordvpn
+    ports:
+    # Uncomment to open application ports:
+      #- "80:13378" # audiobookshelf port (accessible via port 80 at http://meshnet-device.nord/)
+      #- "13378:13378" # audiobookshelf port (accessible via port 13378 at http://meshnet-device.nord:13378/)
+      #- "8096:8096" # Jellyfin port (accessible via port 8096 at http://meshnet-device.nord:8096/)
