@@ -18,6 +18,10 @@
 > [!NOTE]
 > This is an unofficial community project utilizing the official NordVPN Linux client.
 
+## Why this project?
+ - **🚫 Third-Party Bloat:** Most online tutorials rely solely on third-party images (Gluetun, Bubuntux, etc.). This guide uses the official NordVPN Linux client built into a custom image that you can build yourself. *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
+ - **🔒 Security Sandbox:** Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet), this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.
+
 ***Gateway Topology Overview:***
 ```mermaid
 graph TD
@@ -29,15 +33,20 @@ graph TD
     end
 ```
 
-## Why this project?
- - **🚫 Third-Party Bloat:** Most online tutorials rely solely on third-party images (Gluetun, Bubuntux, etc.). This guide uses the official NordVPN Linux client built into a custom image that you can build yourself. *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
- - **🔒 Security Sandbox:** Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet), this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.
-
-## Instructions - ([v1.2.5](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5))
-This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
-
+## Quick Start
 > [!IMPORTANT]
 > I have added a [GitHub Action](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml) to build the docker image from [Dockerfile](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/Dockerfile) with each new release. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (e.g.`nordvpn-docker-gateway-v1.x.x.tar.gz`) to the relevant release, starting with [`v1.2.5`](https://github.com/colvdv/nordvpn-docker-gateway/releases/tag/v1.2.5). View the `nordvpn-docker-gateway` package [here](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
+
+**Select your preferred method to begin:**
+* 🚀 [**Build Image from Source**](#-build-image-from-source)
+* 📦 [**Pull Prebuilt Image**](#-pull-prebuilt-image)
+
+<br>
+<hr>
+<br>
+
+### 🚀 Build Image from Source
+This guide will walk you through the creation of all of the files, their contents, and directories needed in order to route a Docker application container through a Docker NordVPN container. We are using audiobookshelf as the routed container example in this guide, but by changing a few things, you can adapt this guide for any application container.
 
 > [!NOTE]
 > Instead of using the Docker run command provided in step 3, you can use [this docker-compose.yml](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/docker-compose.yml) to deploy the `nordvpn-meshnet` container. **The instructions below have not yet been updated to reflect the option of using Docker Compose for the `nordvpn-meshnet` container.**
@@ -52,6 +61,7 @@ This guide will walk you through the creation of all of the files, their content
  - **Terminal Access:** Basic proficiency with the CLI to run build and deployment commands.
 
 </details>
+
 <details>
 <summary><h3 style="display:inline">🛠️ 1. Create the Dockerfile for the NordVPN Container</h3></summary>
 
