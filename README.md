@@ -255,7 +255,7 @@ services:
     # Uncomment only the relevant image line to choose which Docker image to use:
     #image: ghcr.io/colvdv/nordvpn-docker-gateway:latest # Pull latest image from GitHub Packages
     #image: ghcr.io/colvdv/nordvpn-docker-gateway:v1.2.5 # Pull a specific image release from GitHub Packages
-    image: nordvpn-docker # Use local image, such as one you built yourself.
+    image: nordvpn-docker # Use local image, such as one you built yourself or pulled earlier.
     container_name: nordvpn-meshnet
     hostname: nord-mesh
     restart: unless-stopped
