@@ -12,7 +12,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway/badge)](https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway)
 <br>
 [![GitHub release](https://img.shields.io/github/v/release/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/releases)
-[![NordVPN](https://img.shields.io/badge/NordVPN-v4.6.0-yellow)](https://github.com/NordSecurity/nordvpn-linux/releases)
+[![NordVPN](https://img.shields.io/badge/NordVPN-v4.6.0-yellow)
 [![Docker Image CI](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml/badge.svg)](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml)
 
 ### **Route any Docker Container through the official NordVPN Linux Client in a Custom Docker Image (with Meshnet access) without 3rd-Party Tools or Exposing LAN**
