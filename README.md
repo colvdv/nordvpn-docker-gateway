@@ -33,8 +33,8 @@
    - **[Method 2: Pull Prebuilt Image]()**
  - **[Step 2: Setup & Deploy the NordVPN Gateway Container]()**
    - **[Method A: Docker]()**
-   - **[Method A: Docker Compose]() (recommended)**
- - **[Step 3: Link Application Container]()**
+   - **[Method B: Docker Compose]() (recommended)**
+ - **[Step 3: Link & Deploy Application Container]()**
  - **[Conclusion & Notes]()**
 
 <br>
@@ -297,7 +297,7 @@ docker compose up -d
 <br>
 <hr>
 
-## 🔗 Step 3: Link Application Container (audiobookshelf Example)
+## 🔗 Step 3: Link & Deploy Application Container (audiobookshelf Example)
 
 In your application’s (audiobookshelf) `docker-compose.yml` (e.g., `~/audiobookshelf/docker-compose.yml`), the "magic" happens with `network_mode`.
 ```
