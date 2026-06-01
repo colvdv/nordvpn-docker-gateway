@@ -35,7 +35,6 @@
    - **[Method A: Docker]()**
    - **[Method A: Docker Compose]() (recommended)**
  - **[Step 3: Link Application Container]()**
- - **[Step 4: Deploy Application Container]()**
  - **[Conclusion & Notes]()**
 
 <br>
