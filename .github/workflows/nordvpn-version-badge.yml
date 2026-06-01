@@ -1,8 +1,11 @@
 name: Check NordVPN Version
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight
+    - cron: '0 0 * * 0' # Runs at midnight, only on Sunday
   workflow_dispatch:      # Allows manual trigger
+  push:
+    paths:
+      - 'nordvpn-meshnet/Dockerfile'
 
 jobs:
   check-version:
