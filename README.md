@@ -26,18 +26,18 @@
 
 ## Overview
 📑 **Table Of Contents:**
- - **[Why This Project?]()**
- - **[Overview]()**
-   - **[Step 1: Acquire Docker Image]()**
-     - **[Method 1: Build Image from Source]()**
-       - **[1. Create the Dockerfile for the NordVPN Container Image]()**
-       - **[2. Build Docker Image]()**
-     - **[Method 2: Pull Prebuilt Image]()**
-   - **[Step 2: Setup & Deploy the NordVPN Gateway Container]()**
-     - **[Method A: Docker]()**
-     - **[Method B: Docker Compose]() (recommended)**
-   - **[Step 3: Link & Deploy Application Container]()**
-- **[Conclusion & Notes]()**
+ - **[Why This Project?](#why-this-project)**
+ - **[Overview](#overview)**
+   - **[Step 1: Acquire Docker Image](#-step-1-acquire-docker-image)**
+     - **[Method 1: Build Image from Source](#-method-1-build-image-from-source)**
+       - **[1. Create the Dockerfile for the NordVPN Container Image](#%EF%B8%8F-1-create-the-dockerfile-for-the-nordvpn-container-image)**
+       - **[2. Build Docker Image](#%EF%B8%8F-2-build-docker-image)**
+     - **[Method 2: Pull Prebuilt Image](#-method-2-pull-prebuilt-image)**
+   - **[Step 2: Setup & Deploy the NordVPN Gateway Container](#-step-2-setup--deploy-the-nordvpn-gateway-container)**
+     - **[Method A: Docker](#method-a-docker-run-command)**
+     - **[Method B: Docker Compose](#method-b-docker-compose-recommended) (recommended)**
+   - **[Step 3: Link & Deploy Application Container](#-step-3-link--deploy-application-container-audiobookshelf-example)**
+- **[Conclusion & Notes](#conclusion--notes-)**
 
 <br>
 
@@ -73,7 +73,7 @@ graph TD
 <br>
 
 ## 🚀 Method 1: Build Image from Source
-Follow these steps to build the nordvpn-docker-gateway image from source.
+Follow these steps to build the nordvpn-docker-gateway image from source. Alternatively, you can [pull the prebuilt image](#-method-2-pull-prebuilt-image).
 
 ### 🛠️ 1. Create the Dockerfile for the NordVPN Container Image
 
