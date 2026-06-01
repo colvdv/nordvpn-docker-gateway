@@ -6,7 +6,7 @@
 </h1>
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/colvdv/nordvpn-docker-gateway)](https://github.com/colvdv/nordvpn-docker-gateway/commits)
-[![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile)
+[![GitHub top language](https://img.shields.io/github/languages/top/colvdv/nordvpn-docker-gateway?color=blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/Dockerfile)
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81e60993506b4030be253df5c58f2513)](https://app.codacy.com/gh/colvdv/nordvpn-docker-gateway/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![CodeFactor](https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway/badge)](https://www.codefactor.io/repository/github/colvdv/nordvpn-docker-gateway)
