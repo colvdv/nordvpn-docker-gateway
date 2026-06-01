@@ -26,16 +26,18 @@
 
 ## Overview
 📑 **Table Of Contents:**
- - **[Step 1: Acquire Docker Image]()**
-   - **[Method 1: Build Image from Source]()**
-     - **[1. Create the Dockerfile for the NordVPN Container Image]()**
-     - **[2. Build Docker Image]()**
-   - **[Method 2: Pull Prebuilt Image]()**
- - **[Step 2: Setup & Deploy the NordVPN Gateway Container]()**
-   - **[Method A: Docker]()**
-   - **[Method B: Docker Compose]() (recommended)**
- - **[Step 3: Link & Deploy Application Container]()**
- - **[Conclusion & Notes]()**
+ - **[Why This Project?]()**
+ - **[Overview]()**
+   - **[Step 1: Acquire Docker Image]()**
+     - **[Method 1: Build Image from Source]()**
+       - **[1. Create the Dockerfile for the NordVPN Container Image]()**
+       - **[2. Build Docker Image]()**
+     - **[Method 2: Pull Prebuilt Image]()**
+   - **[Step 2: Setup & Deploy the NordVPN Gateway Container]()**
+     - **[Method A: Docker]()**
+     - **[Method B: Docker Compose]() (recommended)**
+   - **[Step 3: Link & Deploy Application Container]()**
+- **[Conclusion & Notes]()**
 
 <br>
 
