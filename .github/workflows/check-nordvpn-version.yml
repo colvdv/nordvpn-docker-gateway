@@ -1,4 +1,3 @@
-# Triggering re-scan
 name: Check NordVPN Version
 on:
   schedule:
@@ -16,35 +15,35 @@ jobs:
       - name: Compare Versions
         id: compare
         run: |
-          # 1. Extract version from your Dockerfile
+          # 1. Extract version from Dockerfile (e.g., 4.6.0)
           DOCKER_VERSION=$(grep -oP 'nordvpn=\K[0-9.]+' nordvpn-meshnet/Dockerfile)
           
-          # 2. Get latest version from GitHub API
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/NordSecurity/nordvpn-linux/releases/latest | jq -r .tag_name)
+          # 2. Get latest version and strip the 'v' prefix for pure comparison (e.g., 5.0.0)
+          LATEST_TAG=$(curl -s https://api.github.com/repos/NordSecurity/nordvpn-linux/releases/latest | jq -r .tag_name)
+          LATEST_VERSION=${LATEST_TAG#v}
           
-          # 3. Determine status
+          # 3. Determine status and color
           if [ "$DOCKER_VERSION" == "$LATEST_VERSION" ]; then
-            echo "MATCH=true" >> $GITHUB_ENV
-            echo "COLOR=green" >> $GITHUB_ENV
+            COLOR="green"
           else
-            echo "MATCH=false" >> $GITHUB_ENV
-            echo "COLOR=yellow" >> $GITHUB_ENV
+            COLOR="yellow"
           fi
           
           echo "DOCKER_VERSION=$DOCKER_VERSION" >> $GITHUB_ENV
-          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+          echo "COLOR=$COLOR" >> $GITHUB_ENV
 
       - name: Update Badge
         run: |
-          # Constructing the dynamic URL
-          # Format: https://img.shields.io/badge/NordVPN-v$VERSION-$COLOR
+          # Construct the badge URL
           BADGE_URL="https://img.shields.io/badge/NordVPN-v${{ env.DOCKER_VERSION }}-${{ env.COLOR }}"
           
           # Use sed to update the Markdown line in README.md
-          # Assumes you have a placeholder like: sed -i "s|!\[NordVPN\].*|![NordVPN]($BADGE_URL)|" README.md
+          # It looks for the pattern starting with ![NordVPN] and replaces the whole line
+          sed -i "s|!\[NordVPN\].*|![NordVPN]($BADGE_URL)|" README.md
           
+          # Commit and push the changes back to the repository
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add README.md
-          git commit -m "Update NordVPN version badge to ${{ env.DOCKER_VERSION }}" || echo "No changes needed"
+          git commit -m "Update NordVPN version badge to v${{ env.DOCKER_VERSION }}" || echo "No changes needed"
           git push
