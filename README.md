@@ -270,7 +270,7 @@ services:
     volumes:
       - ~/nordvpn-meshnet/data:/var/lib/nordvpn # Set persistent data directory for nordvpn
     ports:
-    # Uncomment to open application ports:
+    # Uncomment to open application ports, or add your own:
       - "80:13378" # audiobookshelf port (accessible via port 80 at http://meshnet-device.nord/)
       #- "13378:13378" # audiobookshelf port (accessible via port 13378 at http://meshnet-device.nord:13378/)
       #- "8096:8096" # Jellyfin port (accessible via port 8096 at http://meshnet-device.nord:8096/)
