@@ -165,7 +165,7 @@ docker build -t nordvpn-docker-gateway .
 ```
 <br>
 
-👉🔗 **[Jump to "Step 2: Deploy the NordVPN Gateway Container"](#-step-2-deploy-the-nordvpn-gateway-container)**
+👉🔗 **Jump to [Step 2: Deploy the NordVPN Gateway Container](#-step-2-deploy-the-nordvpn-gateway-container)**
 
 <hr>
 
@@ -177,7 +177,7 @@ docker build -t nordvpn-docker-gateway .
 **Choose a deployment method:**
 
  - **[Method A: Docker](#method-a-docker-run-command)**
- - **[Method B: Docker Compose](#method-b-docker-compose) (recommended)**
+ - **[Method B: Docker Compose](#method-b-docker-compose-recommended) (recommended)**
 
 <hr>
 
@@ -199,12 +199,24 @@ docker run -d \
    nordvpn-docker-gateway
 ```
 > [!NOTE]
-> Instead of using the `docker run` command provided above, you can [use Docker Compose to deploy the container](#docker-compose) (recommended).
+> Instead of using the `docker run` command provided above, you can [use Docker Compose to deploy the container](#method-b-docker-compose-recommended) (recommended).
 
 > [!TIP]
 > **Pro Tip:** After starting the NordVPN Docker Container, interact with NordVPN using the following command format `docker exec -it nordvpn-meshnet nordvpn <COMMAND>` (e.g. `docker exec -it nordvpn-meshnet nordvpn login --token <YOUR_TOKEN>` to [login to your NordVPN account using a token](https://support.nordvpn.com/hc/en-us/articles/20286980309265-How-to-use-a-token-with-NordVPN-on-Linux)).
 
-#### 🔗 4. Link your Application Container (audiobookshelf Example)
+👉🔗 **Once the container is deployed, continue to [Step 3: Link Application Container](#-step-3-link-application-container-audiobookshelf-example)**
+
+<hr>
+
+#### Method B: Docker Compose (recommended)
+To use Docker Compose, create a `docker-compose.yml` file (e.g. `nano ~/nordvpn-meshnet/docker-compose.yml`) with the following contents:
+```
+YML CONTENTS HERE
+```
+
+<hr>
+
+### 🔗 Step 3: Link Application Container (audiobookshelf Example)
 
 In your application’s (audiobookshelf) `docker-compose.yml` (e.g., `~/audiobookshelf/docker-compose.yml`), the "magic" happens with `network_mode`.
 ```
@@ -232,9 +244,9 @@ Change the volume directories specified in the `docker-compose.yml` above to fit
 
 This `docker-compose.yml` is a slightly modified version of the one we are instructed to create when following [the official audiobookshelf guide for Docker Compose](https://www.audiobookshelf.org/docs/#docker-compose-install); instead of specifying the ports here, we've bound the application's network identity to the NordVPN container (`nordvpn-meshnet`), and in step 3 we mapped port `13378` to port `80` *(or the one you specified)* in the NordVPN container already. Your port mappings may be different depending on the application you are working with; *see your application's documentation for more information.*
 
-#### ✨ 5. Deploy the Application Container
+### ✨ Step 4: Deploy the Application Container
 
-Run the container: `docker compose up -d`
+Deploy the application container: `docker compose up -d`
 
 
 ## Conclusion & Notes 🎉
