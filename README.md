@@ -336,6 +336,7 @@ Deploy the application container:
 docker compose up -d
 ```
 ✨
+
 <br>
 <hr>
 
