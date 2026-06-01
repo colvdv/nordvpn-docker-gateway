@@ -41,9 +41,8 @@ jobs:
           # Construct the badge URL
           BADGE_URL="https://img.shields.io/badge/NordVPN-v${{ env.DOCKER_VERSION }}-${{ env.COLOR }}"
           
-          # Use sed to update the Markdown line in README.md
-          # It looks for the pattern starting with ![NordVPN] and replaces the whole line
-          sed -i "s|!\[NordVPN\].*|![NordVPN]($BADGE_URL)|" README.md
+          # Use sed to update the Markdown line in README.md, preserving the original hyperlink
+          sed -i "s|\[!\[NordVPN\].*\](|[![NordVPN]($BADGE_URL)](|g" README.md
           
           # Commit and push the changes back to the repository
           git config user.name "github-actions"
