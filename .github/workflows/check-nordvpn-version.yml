@@ -1,0 +1,49 @@
+name: Check NordVPN Version
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Compare Versions
+        id: compare
+        run: |
+          # 1. Extract version from your Dockerfile
+          DOCKER_VERSION=$(grep -oP 'nordvpn=\K[0-9.]+' nordvpn-meshnet/Dockerfile)
+          
+          # 2. Get latest version from GitHub API
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/NordSecurity/nordvpn-linux/releases/latest | jq -r .tag_name)
+          
+          # 3. Determine status
+          if [ "$DOCKER_VERSION" == "$LATEST_VERSION" ]; then
+            echo "MATCH=true" >> $GITHUB_ENV
+            echo "COLOR=green" >> $GITHUB_ENV
+          else
+            echo "MATCH=false" >> $GITHUB_ENV
+            echo "COLOR=yellow" >> $GITHUB_ENV
+          fi
+          
+          echo "DOCKER_VERSION=$DOCKER_VERSION" >> $GITHUB_ENV
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+
+      - name: Update Badge
+        run: |
+          # Constructing the dynamic URL
+          # Format: https://img.shields.io/badge/NordVPN-v$VERSION-$COLOR
+          BADGE_URL="https://img.shields.io/badge/NordVPN-v${{ env.DOCKER_VERSION }}-${{ env.COLOR }}"
+          
+          # Use sed to update the Markdown line in README.md
+          # Assumes you have a placeholder like: sed -i "s|!\[NordVPN\].*|![NordVPN]($BADGE_URL)|" README.md
+          
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "Update NordVPN version badge to ${{ env.DOCKER_VERSION }}" || echo "No changes needed"
+          git push
