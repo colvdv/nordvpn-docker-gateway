@@ -1,3 +1,4 @@
+# Triggering re-scan
 name: Check NordVPN Version
 on:
   schedule:
