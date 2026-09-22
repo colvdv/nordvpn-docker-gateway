@@ -23,7 +23,7 @@
 <br>
 
 # ❔ Why this project?
- - **🚫 Third-Party Bloat:** Most online tutorials rely solely on third-party images (Gluetun, Bubuntux, etc.). This project uses the official NordVPN Linux client built into a custom image that you can build yourself. *It’s cleaner, more secure, and utilizes Meshnet for effortless remote access without opening router ports.*
+ - **🚫 Third-Party Bloat:** Most online tutorials rely solely on third-party images. This project uses the official NordVPN Linux client built into a custom image that you can build yourself. *It’s clean, secure, and utilizes Meshnet for effortless remote access without opening router ports.*
  - **🔒 Security Sandbox:** Since the [NordVPN client on Linux currently requires local network access to be enabled in order for Meshnet peers to be able to access Docker containers](https://meshnet.nordvpn.com/troubleshooting/linux#cannot-access-docker-containers-over-meshnet), this is a solution that works around that so that you don't have to expose your entire machine or LAN to your Meshnet peers or to mess with firewall stuff to solve that issue.
 
 <br>
