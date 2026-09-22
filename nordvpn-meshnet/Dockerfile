@@ -13,7 +13,7 @@ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194
 LABEL org.opencontainers.image.authors="COLVDV" \
       org.opencontainers.image.title="NordVPN Docker Gateway" \
       org.opencontainers.image.description="NordVPN Docker Gateway with Meshnet" \
-      org.opencontainers.image.version="1.3" \
+      org.opencontainers.image.version="1.4" \
       org.opencontainers.image.url="https://github.com/colvdv/nordvpn-docker-gateway" \
       org.opencontainers.image.licenses="Apache-2.0" \
       capabilities.net_admin="required" \
@@ -35,8 +35,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && dpkg_arch="$(dpkg --print-architecture)" \
     && echo "deb [arch=$dpkg_arch signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
     && apt-get update \
-    # Pinned to specific NordVPN version (5.0.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
-    && apt-get install -y --no-install-recommends nordvpn=5.0.0 \
+    # Pinned to specific NordVPN version (5.4.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
+    && apt-get install -y --no-install-recommends nordvpn=5.4.0 \
     # Create a non-privileged user and add them to the 'nordvpn' group
     && groupadd -r norduser && useradd -m -g norduser -G nordvpn norduser \
     && apt-get clean \
