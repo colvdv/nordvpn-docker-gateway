@@ -74,7 +74,7 @@ graph TD
 ## 👉 Step 1: Acquire Docker Image
 
 > [!IMPORTANT]
-> I have added a [GitHub Actions workflow](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml) to build a docker image from [`Dockerfile`](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/Dockerfile) every time it is updated. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (e.g.,`nordvpn-docker-gateway-v1.x.x.tar.gz`) to the relevant release, starting with `v1.2.5`. View the `nordvpn-docker-gateway` package [here](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
+> A [GitHub Actions workflow](https://github.com/colvdv/nordvpn-docker-gateway/actions/workflows/docker-image.yml) has been created to build a docker image from [`Dockerfile`](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/nordvpn-meshnet/Dockerfile) every time it is updated. The built image supports both `amd64` and `arm64` architectures and is attached as an asset (e.g.,`nordvpn-docker-gateway-v1.x.x.tar.gz`) to the relevant release, starting with `v1.2.5`. View the `nordvpn-docker-gateway` package [here](https://github.com/colvdv/nordvpn-docker-gateway/pkgs/container/nordvpn-docker-gateway).
 
 **Select your preferred method to begin:**
 * 🚀 [**Method 1: Build Image from Source**](#-method-1-build-image-from-source)
