@@ -127,8 +127,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && dpkg_arch="$(dpkg --print-architecture)" \
     && echo "deb [arch=$dpkg_arch signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
     && apt-get update \
-    # Pinned to specific NordVPN version (5.4.0, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
-    && apt-get install -y --no-install-recommends nordvpn=5.4.0 \
+    # Pinned to specific NordVPN version (5.4.1, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
+    && apt-get install -y --no-install-recommends nordvpn=5.4.1 \
     # Create a non-privileged user and add them to the 'nordvpn' group
     && groupadd -r norduser && useradd -m -g norduser -G nordvpn norduser \
     && apt-get clean \
