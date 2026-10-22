@@ -411,11 +411,7 @@ If you have any feedback, questions, or issues, open an [issue](https://github.c
 <div align="center">
 <a href="https://github.com/colvdv/nordvpn-docker-gateway/stargazers" target="_blank">
   <img src="https://github.com/colvdv/nordvpn-docker-gateway/blob/main/.assets/star-repo.svg" alt="Star This Repo!" width="250" height="54">
-  <a href="https://buymeacoffee.com/colvdv" target="_blank">
-  <img src="https://github.com/colvdv/nordvpn-docker-gateway/blob/main/.assets/buy-me-a-coffee.svg" alt="Star This Repo!" width="250" height="54">
-</a>
 </div>
-
 <br>
 
 > [!NOTE]
