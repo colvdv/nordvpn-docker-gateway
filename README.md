@@ -127,8 +127,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && dpkg_arch="$(dpkg --print-architecture)" \
     && echo "deb [arch=$dpkg_arch signed-by=/usr/share/keyrings/nordvpn-keyring.gpg] https://repo.nordvpn.com/deb/nordvpn/debian stable main" > /etc/apt/sources.list.d/nordvpn.list \
     && apt-get update \
-    # Pinned to specific NordVPN version (6.0.1, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
-    && apt-get install -y --no-install-recommends nordvpn=6.0.1 \
+    # Pinned to specific NordVPN version (6.0.2, the latest as of this writing) for reproducibility. Check https://nordvpn.com/blog/nordvpn-linux-release-notes/ or remove the version tag to pull the latest Linux release version.
+    && apt-get install -y --no-install-recommends nordvpn=6.0.2 \
     # Create a non-privileged user and add them to the 'nordvpn' group
     && groupadd -r norduser && useradd -m -g norduser -G nordvpn norduser \
     && apt-get clean \
@@ -175,7 +175,7 @@ ENTRYPOINT ["/usr/bin/env", "bash", "-c", \
     exit 1"]
 ```
 > [!TIP]
-> Update/remove the `nordvpn` version tag (`=6.0.1`) to pull the desired/latest [linux release](https://github.com/NordSecurity/nordvpn-linux/releases).
+> Update/remove the `nordvpn` version tag (`=6.0.2`) to pull the desired/latest [linux release](https://github.com/NordSecurity/nordvpn-linux/releases).
 
 > [!NOTE]
 > This Dockerfile is a reasonably modified version of the one we are instructed to create when following [the official guide on 'How to build the NordVPN Docker image'](https://support.nordvpn.com/hc/en-us/articles/20465811527057-How-to-build-the-NordVPN-Docker-image). For an explanation on what we've changed and why, [read this](https://github.com/colvdv/nordvpn-docker-gateway/blob/main/Dockerfile-differences.md).
